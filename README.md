@@ -1,5 +1,5 @@
 <p align="center">
-  <img src='https://ozone.one/wp-content/uploads/2022/02/logo-1.svg' width='70%'>
+  <img src='images/ozone-logo-black.svg' width='70%'>
 </p>
 
 ---
