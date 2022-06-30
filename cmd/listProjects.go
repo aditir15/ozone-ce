@@ -5,10 +5,9 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 
+	"github.com/in2tivetech/ozone-ce/controllers"
 	"github.com/spf13/cobra"
 )
 
@@ -24,18 +23,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("listProjects called")
-		// Connect to database
-		db, err := sql.Open("sqlite3", "./names.db")
-		checkErr(err)
-		// defer close
-		defer db.Close()
-
-		//read a record
-		fmt.Println("Reading Records.......... ")
-		project := searchForProject(db)
-		for _, ourProject := range project {
-			fmt.Printf("\n----\nID: %d\nName: %s\nDescription: %s\n", ourProject.id, ourProject.name, ourProject.description)
-		}
+		controllers.ListProjects()
 
 	},
 }
@@ -52,29 +40,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listProjectsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-func searchForProject(db *sql.DB) []project {
-	rows, err := db.Query("SELECT id, name, description FROM projects")
-	defer rows.Close()
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}
-	projects := []project{}
-	for rows.Next() {
-		ourProject := project{}
-		err = rows.Scan(&ourProject.id, &ourProject.name, &ourProject.description)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		projects = append(projects, ourProject)
-	}
-
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return projects
 }
