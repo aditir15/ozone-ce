@@ -30,10 +30,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("createProject called with arguments", args)
+		fmt.Println("createProject called with arguments ", args)
 		fmt.Println("the project name is : ", args[0])
-
-		//1. create a database
 
 		// Connect to database
 		db, err := sql.Open("sqlite3", "./names.db")
@@ -41,22 +39,13 @@ to quickly create a Cobra application.`,
 		// defer close
 		defer db.Close()
 
-		//2. create a table
-		stmt, err := db.Prepare(`CREATE TABLE "projects" (
-			"id" INTEGER,
-			"name"	TEXT,
-			"description"	TEXT,
-			PRIMARY KEY("id" AUTOINCREMENT)
-		)`)
-		checkErr(err)
-		stmt.Exec()
-		defer stmt.Close()
 		newProject := project{
 			name:        args[0],
 			description: args[1],
 		}
-
+		//add a record
 		addProject(db, newProject)
+
 	},
 }
 
