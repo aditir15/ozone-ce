@@ -31,13 +31,14 @@ func CreateProject(name, desc string) {
 	addProject(db, newProject)
 }
 
-func ListProjects() {
+func ListProjects() []models.Project {
 	//read a record
 	fmt.Println("Reading Records.......... ")
-	project := searchForProject(db)
-	for _, ourProject := range project {
+	projects := searchForProject(db)
+	for _, ourProject := range projects {
 		fmt.Printf("\n----\nID: %d\nName: %s\nDescription: %s\n", ourProject.Id, ourProject.Name, ourProject.Description)
 	}
+	return projects
 }
 
 func addProject(db *sql.DB, newProject models.Project) {
@@ -60,6 +61,7 @@ func checkErr(err error) {
 
 func searchForProject(db *sql.DB) []models.Project {
 	rows, err := db.Query("SELECT id, name, description FROM projects")
+	checkErr(err)
 	defer rows.Close()
 	err = rows.Err()
 	if err != nil {
